@@ -1,5 +1,5 @@
 {
-  "name": "admin-one-vue-tailwind",
+  "name": "main",
   "version": "3.1.0",
   "scripts": {
     "dev": "vite",
@@ -8,9 +8,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@mdi/js": "^7.0.96",
+    "@mdi/js": "^7.1.96",
     "@rushstack/eslint-patch": "^1.1.4",
-    "axios": "^0.27.0",
+    "axios": "^0.27.2",
     "chart.js": "^3.6.0",
     "numeral": "^2.0.6",
     "pinia": "^2.0.13",

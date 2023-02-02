@@ -1,8 +1,26 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import Style from "@/views/StyleView.vue";
 import Home from "@/views/HomeView.vue";
+import Login from "@/views/LoginView2.vue";
+import Signup from "@/views/SignupView.vue"
 
 const routes = [
+  {
+    meta:{
+      title: "Login",
+    },
+    path: "/login",
+    name: 'LoginView',
+    component: Login
+  },
+  {
+    meata:{
+      title: "Signup",
+    },
+    path: "/signup",
+    name: "SignupView",
+    component: Signup,
+  },
   {
     meta: {
       title: "Select style",
@@ -77,10 +95,12 @@ const routes = [
     name: "error",
     component: () => import("@/views/ErrorView.vue"),
   },
+
 ];
 
+
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
     return savedPosition || { top: 0 };
