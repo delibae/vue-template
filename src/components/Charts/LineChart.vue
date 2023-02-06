@@ -8,6 +8,7 @@ import {
   LinearScale,
   CategoryScale,
   Tooltip,
+  Legend,
 } from "chart.js";
 
 const props = defineProps({
@@ -27,6 +28,7 @@ Chart.register(
   LineController,
   LinearScale,
   CategoryScale,
+  Legend,
   Tooltip
 );
 
@@ -38,8 +40,22 @@ onMounted(() => {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        y: {
+        y1: {
+          type: 'linear',
           display: false,
+          position: 'left',
+        },
+        y2: {
+          type: 'linear',
+          display: false,
+          position: 'right',
+
+        },
+        y3: {
+          type: 'linear',
+          display: false,
+          position: 'right',
+
         },
         x: {
           display: true,

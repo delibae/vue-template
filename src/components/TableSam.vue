@@ -15,9 +15,56 @@ defineProps({
 
 const mainStore = useMainStore();
 
-const items = computed(() => mainStore.clients);
 
-console.log(items);
+var items = {}
+
+items.value = [
+
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+    
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+    {
+        "date": "Dec 1, 2021",
+        "weight": "73",
+        "lose_kcal": "2000",
+        "kcal_consume": "3000",        
+    },
+
+]
 
 const isModalActive = ref(false);
 
@@ -97,7 +144,7 @@ const checked = (isChecked, client) => {
       :key="checkedRow.id"
       class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700"
     >
-      {{ checkedRow.name }}
+      {{ checkedRow.date }}
     </span>
   </div>
 
@@ -106,11 +153,10 @@ const checked = (isChecked, client) => {
       <tr>
         <th v-if="checkable" />
         <th />
-        <th>Name</th>
-        <th>Company</th>
-        <th>City</th>
-        <th>Progress</th>
-        <th>Created</th>
+        <!-- <th>Date</th> -->
+        <th>Weight</th>
+        <th>Lose</th>
+        <th>Consumed</th>
         <th />
       </tr>
     </thead>
@@ -120,53 +166,21 @@ const checked = (isChecked, client) => {
           v-if="checkable"
           @checked="checked($event, client)"
         />
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar
-            :username="client.name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-          />
+        <td class = " font-semibold">
+          {{ client.date }}
         </td>
-        <td data-label="Name">
-          {{ client.name }}
+
+        <td data-label="Weight">
+          {{ client.weight }}kg
         </td>
-        <td data-label="Company">
-          {{ client.company }}
+        <td data-label="lose_kcal">
+          {{ client.lose_kcal }}kcal
         </td>
-        <td data-label="City">
-          {{ client.city }}
+
+        <td data-label="lose_kcal">
+          {{ client.kcal_consume }}kcal
         </td>
-        <td data-label="Progress" class="lg:w-32">
-          <progress
-            class="flex w-2/5 self-center lg:w-full"
-            max="100"
-            :value="client.progress"
-          >
-            {{ client.progress }}
-          </progress>
-        </td>
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small
-            class="text-gray-500 dark:text-slate-400"
-            :title="client.created"
-            >{{ client.created }}</small
-          >
-        </td>
-        <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton
-              color="info"
-              :icon="mdiEye"
-              small
-              @click="isModalActive = true"
-            />
-            <BaseButton
-              color="danger"
-              :icon="mdiTrashCan"
-              small
-              @click="isModalDangerActive = true"
-            />
-          </BaseButtons>
-        </td>
+
       </tr>
     </tbody>
   </table>

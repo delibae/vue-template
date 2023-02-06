@@ -149,6 +149,7 @@ const formStatusSubmit = () => {
 
       <SectionTitle>Form with status example</SectionTitle>
 
+      
       <CardBox
         class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto"
         is-form

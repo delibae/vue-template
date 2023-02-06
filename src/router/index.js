@@ -4,7 +4,32 @@ import Home from "@/views/HomeView.vue";
 import Login from "@/views/LoginView2.vue";
 import Signup from "@/views/SignupView.vue"
 
+import Activity from "@/views/ActivityView.vue"
+import Analysis from "@/views/AnalysisView.vue"
+// import Upload from "@/views/UploadView.vue"
+
+import Session from "@/views/SessionView.vue"
+
+import axios from "axios";
+
+
 const routes = [
+  {
+    meta:{
+      title: "Session",
+    },
+    path: "/session",
+    name: 'SessionView',
+    component: Session
+  },
+  // {
+  //   meta:{
+  //     title: "Upload",
+  //   },
+  //   path: "/upload",
+  //   name: 'UploadView',
+  //   component: Upload
+  // },
   {
     meta:{
       title: "Login",
@@ -20,6 +45,22 @@ const routes = [
     path: "/signup",
     name: "SignupView",
     component: Signup,
+  },
+  {
+    meta:{
+      title: "Activity",
+    },
+    path: "/activity",
+    name: 'AcitvityView',
+    component: Activity
+  },
+  {
+    meta:{
+      title: "Analysis",
+    },
+    path: "/analysis",
+    name: 'AnalysisView',
+    component: Analysis
   },
   {
     meta: {
@@ -62,6 +103,22 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: () => import("@/views/ProfileView.vue"),
+  },
+  {
+    meta: {
+      title: "Goals",
+    },
+    path: "/goals",
+    name: "goals",
+    component: () => import("@/views/GoalsView.vue"),
+  },
+  {
+    meta: {
+      title: "Upload",
+    },
+    path: "/upload",
+    name: "upload",
+    component: () => import("@/views/UploadView.vue"),
   },
   {
     meta: {

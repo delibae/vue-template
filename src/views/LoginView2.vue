@@ -66,15 +66,36 @@
 <script>
 
 import axios from 'axios';
+// axios.defaults.withCredentials = true;
+// axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 
 export default {
     name: 'LoginView',
     components: {
     },
+    beforeMount() {
+        var url = 'http://localhost:3001/api/session';
+        axios.get(url, { withCredentials: true })
+            .then(function (response) {
+                // 성공 핸들링
+                console.log(response);
+                if(response.data != ""){
+                    window.location.href = '/dashboard'
+                }
+            })
+            .catch(function (error) {
+                // 에러 핸들링
+                console.log(error);
+            })
+            .then(function () {
+                // 항상 실행되는 영역
+            });
+        
+    },
     data() {
         return {
             f_data_l: ['', ''],
-            f_list: ['id', 'pw']
+            f_list: ['user_id', 'user_password']
         }
     },
     methods: {
@@ -95,7 +116,8 @@ export default {
             axios.post(url, frm, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                withCredentials: true
             })
                 .then((Response) => {
                     console.log(Response);

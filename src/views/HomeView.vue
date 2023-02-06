@@ -10,7 +10,12 @@ import {
   mdiGithub,
   mdiChartPie,
   mdiFire,
-  mdiWeightKilogram
+  mdiWeightKilogram,
+  mdiRun,
+  mdiCalendarToday,
+  mdiRice,
+  mdiFoodDrumstick,
+  mdiPigVariantOutline
 } from "@mdi/js";
 import * as chartConfig from "@/components/Charts/chart.config.js";
 import LineChart from "@/components/Charts/LineChart.vue";
@@ -25,227 +30,154 @@ import CardBoxClient from "@/components/CardBoxClient.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
+import {get_days, get_months} from "@/rest/chartconfig.js";
+
+
+let now = new Date("2022-09-01");
 
 const chartData = ref(null);
 
-const get_c = () => {
-  chartData.value = {
-    "labels": [
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07",
-      "08",
-      "09"
-    ],
-    "datasets": [
-      {
-        "fill": false,
-        "borderColor": "#00D1B2",
-        "borderWidth": 2,
-        "borderDash": [],
-        "borderDashOffset": 0,
-        "pointBackgroundColor": "#00D1B2",
-        "pointBorderColor": "rgba(255,255,255,0)",
-        "pointHoverBackgroundColor": "#00D1B2",
-        "pointBorderWidth": 20,
-        "pointHoverRadius": 4,
-        "pointHoverBorderWidth": 15,
-        "pointRadius": 4,
-        "data": [
-          25,
-          52,
-          124,
-          39,
-          83,
-          108,
-          180,
-          21,
-          65
-        ],
-        "tension": 0.5,
-        "cubicInterpolationMode": "default"
-      },
-      {
-        "fill": false,
-        "borderColor": "#209CEE",
-        "borderWidth": 2,
-        "borderDash": [],
-        "borderDashOffset": 0,
-        "pointBackgroundColor": "#209CEE",
-        "pointBorderColor": "rgba(255,255,255,0)",
-        "pointHoverBackgroundColor": "#209CEE",
-        "pointBorderWidth": 20,
-        "pointHoverRadius": 4,
-        "pointHoverBorderWidth": 15,
-        "pointRadius": 4,
-        "data": [
-          123,
-          99,
-          190,
-          98,
-          93,
-          27,
-          136,
-          6,
-          158
-        ],
-        "tension": 0.5,
-        "cubicInterpolationMode": "default"
-      },
-      {
-        "fill": false,
-        "borderColor": "#FF3860",
-        "borderWidth": 2,
-        "borderDash": [],
-        "borderDashOffset": 0,
-        "pointBackgroundColor": "#FF3860",
-        "pointBorderColor": "rgba(255,255,255,0)",
-        "pointHoverBackgroundColor": "#FF3860",
-        "pointBorderWidth": 20,
-        "pointHoverRadius": 4,
-        "pointHoverBorderWidth": 15,
-        "pointRadius": 4,
-        "data": [
-          2,
-          9,
-          61,
-          13,
-          137,
-          117,
-          37,
-          3,
-          179
-        ],
-        "tension": 0.5,
-        "cubicInterpolationMode": "default"
-      }
-    ]
-  };
-}
-const fillChartData = () => {
-  chartData.value = {
-    "labels": [
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07",
-      "08",
-      "09"
-    ],
-    labels: ['January', 'February', 'March', 'April', 'May'],
-    "datasets": [
-      {
-        "fill": false,
-        "label": 'test',
-        "borderColor": "#00D1B2",
-        "borderWidth": 2,
-        "borderDash": [],
-        "borderDashOffset": 0,
-        "pointBackgroundColor": "#00D1B2",
-        "pointBorderColor": "rgba(255,255,255,0)",
-        "pointHoverBackgroundColor": "#00D1B2",
-        "pointBorderWidth": 20,
-        "pointHoverRadius": 4,
-        "pointHoverBorderWidth": 15,
-        "pointRadius": 4,
-        "data": [
-          25,
-          52,
-          124,
-          39,
-          83,
-          108,
-          180,
-          21,
-          65
-        ],
-        "tension": 0.5,
-        "cubicInterpolationMode": "default"
-      },
-      {
-        "fill": false,
-        "label": "two",
-        "borderColor": "#209CEE",
-        "borderWidth": 2,
-        "borderDash": [],
-        "borderDashOffset": 0,
-        "pointBackgroundColor": "#209CEE",
-        "pointBorderColor": "rgba(255,255,255,0)",
-        "pointHoverBackgroundColor": "#209CEE",
-        "pointBorderWidth": 20,
-        "pointHoverRadius": 4,
-        "pointHoverBorderWidth": 15,
-        "pointRadius": 4,
-        "data": [
-          123,
-          99,
-          190,
-          98,
-          93,
-          27,
-          136,
-          6,
-          158
-        ],
-        "tension": 0.5,
-        "cubicInterpolationMode": "default"
-      },
-      {
-        "fill": false,
-        "label": "three",
-        "borderColor": "#FF3860",
-        "borderWidth": 2,
-        "borderDash": [],
-        "borderDashOffset": 0,
-        "pointBackgroundColor": "#FF3860",
-        "pointBorderColor": "rgba(255,255,255,0)",
-        "pointHoverBackgroundColor": "#FF3860",
-        "pointBorderWidth": 20,
-        "pointHoverRadius": 4,
-        "pointHoverBorderWidth": 15,
-        "pointRadius": 4,
-        "data": [
-          2,
-          9,
-          61,
-          13,
-          137,
-          117,
-          37,
-          3,
-          1
-        ],
-        "tension": 0.5,
-        "cubicInterpolationMode": "default"
-      }
-    ],
-
-    options: {
-        legend: {
-            display: true,
-            labels: {
-                fontColor: 'rgb(255, 99, 132)'
-            }
-        }
-    }
+const chartData2 = ref(null);
 
 
-  };
+const fillChartData_days = async () => {
 
+  var rrr = await get_days()
+
+  chartData.value = rrr;
 };
 
+const fillChartData_months = async () => {
+
+var rrr = await get_months()
+
+chartData2.value = rrr;
+};
+
+const today_sum = ref(null);
+const activity_sum = ref(null);
+const nutrient_sum = ref(null);
+const weight_trend = ref(null);
+const nutrient_trend = ref(null);
+const yes_nutrient_sum = ref(null);
+const activity_warn = ref(null);
 
 
+weight_trend.value = ['13%','down']
+today_sum.value = {"today_cal": 3000, "today_weight": 70, "today_remain": 1000};
+nutrient_sum.value = {'fat': 300, 'protein': 400, 'carbo': 300};
+yes_nutrient_sum.value = {'fat': 300, 'protein': 400, 'carbo': 300};
+nutrient_trend.value = {'fat': ['12%', 'down'], 'protein':['13%', 'up'], 'carbo':['0%','mid']};
+
+activity_sum.value = {'today_activity': 1000, 'today_activity_goal': 500};
+
+activity_warn.value = ['Good!', 'success'];
+
+const get_today = async () => {
+try {
+    var response = await axios.get('http://localhost:3001/api/profile', {
+      withCredentials: true,
+    });
+    today_sum.value['today_cal'] = response.data[0].kcal_per_day;
+    today_sum.value['today_weight'] = response.data[0].current_weight;
+    let now = new Date("2022-09-01");
+
+
+
+  } catch (err) {
+    console.log("Error >>", err);
+  }
+
+  try {
+      var response = await axios.get("http://localhost:3001/api/today/total", {
+        params: { date: now },
+        withCredentials: true,
+      });
+      var n_in = {'fat': 0, 'protein': 0, 'carbo': 0}
+      var total_eat = 0;
+      console.log(response.data);
+      for(var i = 0; i < response.data[0].length; i++){
+        n_in['fat'] += response.data[0][i]['fat'];
+        n_in['protein'] += response.data[0][i]['protein'];
+        n_in['carbo'] += response.data[0][i]['carbo'];
+        total_eat += response.data[0][i]['kcal'];
+      }
+      nutrient_sum.value = n_in;
+      var n_in = {'fat': 0, 'protein': 0, 'carbo': 0}
+      var yes_total_eat = 0;
+      for(var i = 0; i < response.data[1].length; i++){
+        n_in['fat'] += response.data[1][i]['fat'];
+        n_in['protein'] += response.data[1][i]['protein'];
+        n_in['carbo'] += response.data[1][i]['carbo'];
+        yes_total_eat += response.data[0][i]['kcal'];
+      }
+      yes_nutrient_sum.value = n_in;
+      console.log('yes', yes_nutrient_sum.value);
+
+      var label_list = ['fat', 'protein', 'carbo']
+      for(var i = 0; i < label_list.length; i++){
+        var percent = Math.ceil((nutrient_sum.value[label_list[i]] - yes_nutrient_sum.value[label_list[i]])*100/(yes_nutrient_sum.value[label_list[i]]));
+        nutrient_trend.value[label_list[i]][0] = percent + '%'
+        if(percent > 0){
+          nutrient_trend.value[label_list[i]][1] = 'up';
+        }else if (percent < 0){
+          nutrient_trend.value[label_list[i]][1] = 'down';
+        }else{
+          nutrient_trend.value[label_list[i]][1] = 'mid';
+        }
+
+      }
+
+      var yes_weight = response.data[2][0].weight;
+      var w_percent = Math.ceil((today_sum.value.today_weight - yes_weight)*100/yes_weight)
+      weight_trend.value[0] = w_percent + '%'
+
+      if(w_percent > 0){
+        weight_trend.value[1] = 'up'
+      }else if(w_percent < 0){
+        weight_trend.value[1] = 'down'
+      }else{
+        weight_trend.value[1] = 'mid'
+      }
+
+      var activity_in = {'today_activity': 0, 'today_activity_goal': 0};
+
+      for(var i = 0; i < response.data[3].length; i++){
+        activity_in['today_activity'] += response.data[3][i]['working_time'] * response.data[3][i]['coefficient'];
+      }
+
+      activity_sum.value = activity_in;
+
+
+      // to do 운동으로 인한 섭취 가능 칼로리 증가 필요(완료)
+      today_sum.value['today_remain'] = today_sum.value['today_cal'] - total_eat + activity_in['today_activity'];
+
+      if(today_sum.value['today_remain'] >= 0){
+        activity_sum.value['today_activity_goal'] = 0;
+      }else{
+        activity_sum.value['todya_activity_goal'] -= today_sum.value['total_remain'];
+        activity_warn.value[0] = "Warning!";
+        activity_warn.value[1] = "alert";
+      }
+      
+      console.log("today total >>", response.data[3]);
+    } catch (err) {
+      console.log("Error >>", err);
+    }
+};
+
+get_today();
+
+
+
+const get_sum = function (){
+  console.log(today_sum['today_cal'])
+}
 
 onMounted(() => {
-  fillChartData();
+  fillChartData_days();
+  fillChartData_months();
+
 });
 
 
@@ -259,21 +191,49 @@ const transactionBarItems = computed(() => mainStore.history);
 </script>
 
 <template>
-  <LayoutAuthenticated>
+  <LayoutAuthenticated @change="change">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Overview" main>
+      <!-- <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Overview" main>
         <BaseButton href="https://github.com/justboil/admin-one-vue-tailwind" target="_blank" :icon="mdiGithub"
           label="Star on GitHub" color="contrast" rounded-full small />
+      </SectionTitleLineWithButton> -->
+      <SectionTitleLineWithButton :icon="mdiCalendarToday" title="금일 요약">
+        <BaseButton :icon="mdiReload" color="whiteDark" @click="get_today"/>
       </SectionTitleLineWithButton>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
-        <CardBoxWidget trend="12%" trend-type="up" color="text-red-500" :icon="mdiFire" :number="today_cal"
-          suffix="kcal" label="하루 권장 열량" />
-        <CardBoxWidget trend="12%" trend-type="down" color="text-black-500" :icon="mdiWeightKilogram"
-          :number="today_weight" suffix="kg" label="몸무게" />
-        <CardBoxWidget trend="Overflow" trend-type="alert" color="text-red-500" :icon="mdiFire" :number="today_remain"
+        <CardBoxWidget trend="info" trend-type="success" color="text-red-500" :icon="mdiFire" :number="today_sum['today_cal']"
+          suffix="kcal" label="하루 권장 섭취 열량" />
+        <CardBoxWidget :trend="weight_trend[0]" :trend-type="weight_trend[1]" color="text-black-500" :icon="mdiWeightKilogram"
+          :number="today_sum['today_weight']" suffix="kg" label="몸무게" />
+        <CardBoxWidget trend="Info" trend-type="success" color="text-red-500" :icon="mdiFire" :number="today_sum['today_remain']"
           suffix="kcal" label="남은 섭취 가능 열량" />
       </div>
+
+      <SectionTitleLineWithButton :icon="mdiCalendarToday" title="금일 영양소 섭취">
+        <BaseButton :icon="mdiReload" color="whiteDark" />
+      </SectionTitleLineWithButton>
+
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+        <CardBoxWidget :trend="nutrient_trend['carbo'][0]" :trend-type="nutrient_trend['carbo'][1]" color="text-lime-400" :icon="mdiRice" :number="nutrient_sum['carbo']" suffix="g"
+          label="탄수화물" />
+        <CardBoxWidget :trend="nutrient_trend['protein'][0]" :trend-type="nutrient_trend['protein'][1]" color="text-orange-800" :icon="mdiFoodDrumstick" :number="nutrient_sum['protein']"
+          suffix="g" label="단백질" />
+        <CardBoxWidget :trend="nutrient_trend['fat'][0]" :trend-type="nutrient_trend['fat'][1]" color="text-rose-300" :icon="mdiPigVariantOutline"
+          :number="nutrient_sum['fat']" suffix="g" label="지방" />
+      </div>
+
+      <SectionTitleLineWithButton :icon="mdiRun" title="금일 활동">
+        <BaseButton :icon="mdiReload" color="whiteDark" />
+      </SectionTitleLineWithButton>
+
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+        <CardBoxWidget trend="12%" trend-type="up" color="text-red-500" :icon="mdiFire" :number="activity_sum['today_activity']"
+          suffix="kcal" label="금일 운동 열량" />
+        <CardBoxWidget :trend="activity_warn[0]" :trend-type="activity_warn[1]" color="text-red-500" :icon="mdiFire" :number="activity_sum['today_activity_goal']"
+          suffix="kcal" label="필수 운동량" />
+      </div>
+
       <!-- 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div class="flex flex-col justify-between">
@@ -302,13 +262,23 @@ const transactionBarItems = computed(() => mainStore.history);
 
       <!-- <SectionBannerStarOnGitHub class="mt-6 mb-6" /> -->
 
-      <SectionTitleLineWithButton :icon="mdiChartPie" title="Trends overview">
-        <BaseButton :icon="mdiReload" color="whiteDark" v-on:click="get_c()" />
+      <SectionTitleLineWithButton :icon="mdiChartPie" title="Trends overview - 최근 9일">
+        <BaseButton :icon="mdiReload" color="whiteDark" @click="fillChartData_days"/>
       </SectionTitleLineWithButton>
 
       <CardBox class="mb-6">
         <div v-if="chartData">
           <line-chart :data="chartData" class="h-96" />
+        </div>
+      </CardBox>
+
+      <SectionTitleLineWithButton :icon="mdiChartPie" title="Trends overview - 최근 9달">
+        <BaseButton :icon="mdiReload" color="whiteDark" @click="fillChartData_months"/>
+      </SectionTitleLineWithButton>
+
+      <CardBox class="mb-6">
+        <div v-if="chartData">
+          <line-chart :data="chartData2" class="h-96" />
         </div>
       </CardBox>
 
@@ -341,119 +311,69 @@ export default {
   name: 'LoginView',
   components: {
   },
+  beforeMount() {
+    var url = 'http://localhost:3001/api/session';
+    axios.get(url, { withCredentials: true })
+      .then(function (response) {
+        // 성공 핸들링
+        console.log(response);
+        if (response.data == "") {
+          window.location.href = '/login'
+        }
+      })
+      .catch(function (error) {
+        // 에러 핸들링
+        console.log(error);
+      })
+      .then(function () {
+        // 항상 실행되는 영역
+      });
+
+    var url2 = 'http://localhost:3001/api/profile';
+    axios.get(url2, { withCredentials: true })
+      .then(function (response) {
+        // 성공 핸들링
+        console.log(response.data[0]);
+        var user_name = response.data[0].user_name;
+
+        useMainStore().setUser({
+          name: user_name,
+          email: "john@example.com",
+          avatar:
+            "https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93",
+        });
+
+      })
+      .catch(function (error) {
+        // 에러 핸들링
+        console.log(error);
+      })
+      .then(function () {
+        // 항상 실행되는 영역
+      });
+
+  },
   data() {
     return {
-      today_cal: 3000,
-      today_weight: 70,
-      today_remain: 1000
+
+      is_logout: false,
+      profile: []
     }
   },
   methods: {
     test: function () {
       console.log(1);
     },
-    getchart: function () {
-
-      var myChart = {
-        "labels": [
-          "01",
-          "02",
-          "03",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09"
-        ],
-        "datasets": [
-          {
-            "fill": false,
-            "borderColor": "#00D1B2",
-            "borderWidth": 2,
-            "borderDash": [],
-            "borderDashOffset": 0,
-            "pointBackgroundColor": "#00D1B2",
-            "pointBorderColor": "rgba(255,255,255,0)",
-            "pointHoverBackgroundColor": "#00D1B2",
-            "pointBorderWidth": 20,
-            "pointHoverRadius": 4,
-            "pointHoverBorderWidth": 15,
-            "pointRadius": 4,
-            "data": [
-              114,
-              176,
-              170,
-              146,
-              172,
-              129,
-              78,
-              42,
-              160
-            ],
-            "tension": 0.5,
-            "cubicInterpolationMode": "default"
-          },
-          {
-            "fill": false,
-            "borderColor": "#209CEE",
-            "borderWidth": 2,
-            "borderDash": [],
-            "borderDashOffset": 0,
-            "pointBackgroundColor": "#209CEE",
-            "pointBorderColor": "rgba(255,255,255,0)",
-            "pointHoverBackgroundColor": "#209CEE",
-            "pointBorderWidth": 20,
-            "pointHoverRadius": 4,
-            "pointHoverBorderWidth": 15,
-            "pointRadius": 4,
-            "data": [
-              171,
-              121,
-              51,
-              107,
-              167,
-              143,
-              62,
-              188,
-              142
-            ],
-            "tension": 0.5,
-            "cubicInterpolationMode": "default"
-          },
-          {
-            "fill": false,
-            "borderColor": "#FF3860",
-            "borderWidth": 2,
-            "borderDash": [],
-            "borderDashOffset": 0,
-            "pointBackgroundColor": "#FF3860",
-            "pointBorderColor": "rgba(255,255,255,0)",
-            "pointHoverBackgroundColor": "#FF3860",
-            "pointBorderWidth": 20,
-            "pointHoverRadius": 4,
-            "pointHoverBorderWidth": 15,
-            "pointRadius": 4,
-            "data": [
-              90,
-              80,
-              171,
-              130,
-              162,
-              153,
-              65,
-              58,
-              177
-            ],
-            "tension": 0.5,
-            "cubicInterpolationMode": "default"
-          }
-        ]
-      }
-      this.chartData.value = myChart;
-      console.log(this.chartData);
+    change: function () {
+      console.log(1);
+      window.location.href = '/login';
     },
-  }
+
+
+
+
+  },
+
 
 }
 </script>

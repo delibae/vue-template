@@ -11,13 +11,35 @@ import {
   mdiResponsive,
   mdiPalette,
   mdiReact,
+  mdiRun,
+  mdiCalendarRange
 } from "@mdi/js";
 
 export default [
   {
     to: "/dashboard",
     icon: mdiMonitor,
-    label: "Dashboard",
+    label: "요약",
+  },
+  {
+    to: "/activity",
+    icon: mdiRun,
+    label: "운동기록",
+  },
+  {
+    to: "/analysis",
+    icon: mdiCalendarRange,
+    label: "상세 분석",
+  },
+  {
+    to: "/goals",
+    label: "상태와 목표",
+    icon: mdiSquareEditOutline,
+  },
+  {
+    to: "/upload",
+    label: "업로드",
+    icon: mdiSquareEditOutline,
   },
   {
     to: "/tables",
@@ -29,6 +51,7 @@ export default [
     label: "Forms",
     icon: mdiSquareEditOutline,
   },
+
   {
     to: "/ui",
     label: "UI",
