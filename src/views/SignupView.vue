@@ -66,6 +66,20 @@
                                         </select>
 
                                     </div>
+
+                                    <div>
+                                        <label :for="f_data_l[10]"
+                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                            Your Purpose
+                                        </label>
+                                        <select v-model="f_data_l[10]" :id="f_data_l[10]"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            required>
+                                            <option value="0">다이어트</option>
+                                            <option value="1">벌크업</option>
+                                        </select>
+
+                                    </div>
                                 </div>
 
                                 <div class="flex flex-col">
@@ -158,7 +172,45 @@
 </template>
 
 <script>
+// to do (태희)
+function get_bmr(height,weight,age,gender){
+    var bmr;
+    if (gender.toLowerCase()=='f'){
+        bmr = (6.25*height) + (10*weight) - (5*age) - 161  ; 
+    }else{
 
+        bmr = (6.25*height) + (10*weight) - (5*age) + 5;
+    }
+
+    return bmr;
+}
+// to do (태희)
+function get_kcal_per_day(energy_for_day,goal_weight,weight,goal_date){
+    console.log(goal_date);
+    var today = new Date();
+    var arr1 = goal_date.split('-');
+    console.log(arr1);
+    console.log(today);
+    let year = today.getFullYear(); // 년도
+    let month = today.getMonth() + 1;  // 월
+    let day = today.getDay();  // 요일
+    var arr2 = [year,month,day];
+
+    
+
+    var dat1 = new Date(arr1[0], arr1[1], arr1[2]); // 목표일
+    var dat2 = new Date(arr2[0], arr2[1], arr2[2]); // 오늘
+    
+    
+    
+
+    let goal_days = Math.floor((dat1-dat2)/(1000*60*60*24));
+    console.log('goal_days = '+goal_days);
+    var kcal_per_day = energy_for_day-((((weight-goal_weight)/goal_days))*7000);
+    
+    return kcal_per_day
+
+}
 
 import axios from 'axios';
 
@@ -169,7 +221,7 @@ export default {
     data() {
         return {
             f_data_l: [],
-            f_list: ['user_id', 'user_password', 'age', 'user_name', 'gender', 'current_weight', 'height', 'goal_weight', 'd_day', 'minimum_kcal'],
+            f_list: ['user_id', 'user_password', 'age', 'user_name', 'gender', 'current_weight', 'height', 'goal_weight', 'd_day', 'minimum_kcal', 'purpose'],
             f_cal_list: ['bmr', 'kcal_per_day', 'profile_path', 'setting']
         }
     },
@@ -179,6 +231,7 @@ export default {
             .then(function (response) {
                 // 성공 핸들링
                 console.log(response);
+                
                 if(response.data != ""){
                     window.location.href = '/dashboard'
                 }
@@ -199,6 +252,7 @@ export default {
             // var url = protocol + "//" + port + '/api/predict_all';
             var url = 'http://localhost:3001/api/signup';
             console.log(url);
+            console.log('f_data_l'+this.f_data_l);
             const frm = new FormData();
             var f_list = this.f_list;
             console.log(f_list);
@@ -206,11 +260,25 @@ export default {
                 var to_in = this.f_data_l[step]
                 frm.append(f_list[step], to_in);
             }
-
+            // to do (태희)
+            var bmr = get_bmr(this.f_data_l[6], this.f_data_l[5], this.f_data_l[2], this.f_data_l[4]);
+            var kcal_per_day = get_kcal_per_day(bmr, this.f_data_l[7], this.f_data_l[5],  this.f_data_l[8]);
             for (var step = 0; step < this.f_cal_list.length; step++){
                 var to_in = 1;
+                if (step===0){
+                    
+                    frm.append(this.f_cal_list[step],bmr);
+                }else if(step===1){
+             
+                    frm.append(this.f_cal_list[step],kcal_per_day);
+
+                }else{
                 frm.append(this.f_cal_list[step], to_in);
             }
+            }
+            
+            
+            console.log('frm'+frm);
 
             axios.post(url, frm, {
                 headers: {

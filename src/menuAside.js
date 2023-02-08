@@ -12,7 +12,8 @@ import {
   mdiPalette,
   mdiReact,
   mdiRun,
-  mdiCalendarRange
+  mdiCalendarRange,
+  mdiFlagCheckered,
 } from "@mdi/js";
 
 export default [
@@ -34,12 +35,22 @@ export default [
   {
     to: "/goals",
     label: "상태와 목표",
-    icon: mdiSquareEditOutline,
+    icon: mdiFlagCheckered,
   },
   {
     to: "/upload",
     label: "업로드",
     icon: mdiSquareEditOutline,
+  },
+  {
+    to: "/upload2",
+    label: "업로드2",
+    icon: mdiSquareEditOutline,
+  },
+  {
+    to: "/profile2",
+    label: "프로필",
+    icon: mdiAccountCircle,
   },
   {
     to: "/tables",
@@ -80,6 +91,11 @@ export default [
   {
     to: "/error",
     label: "Error",
+    icon: mdiAlertCircle,
+  },
+  {
+    to: "/loading",
+    label: "Loading",
     icon: mdiAlertCircle,
   },
   {

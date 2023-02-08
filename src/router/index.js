@@ -2,44 +2,44 @@ import { createRouter, createWebHistory } from "vue-router";
 import Style from "@/views/StyleView.vue";
 import Home from "@/views/HomeView.vue";
 import Login from "@/views/LoginView2.vue";
-import Signup from "@/views/SignupView.vue"
+import Signup from "@/views/SignupView.vue";
 
-import Activity from "@/views/ActivityView.vue"
-import Analysis from "@/views/AnalysisView.vue"
+import Activity from "@/views/ActivityView.vue";
+import Analysis from "@/views/AnalysisView.vue";
 // import Upload from "@/views/UploadView.vue"
+import profile2 from "@/views/ProfileView2.vue";
 
-import Session from "@/views/SessionView.vue"
+import Session from "@/views/SessionView.vue";
 
 import axios from "axios";
 
-
 const routes = [
   {
-    meta:{
+    meta: {
       title: "Session",
     },
     path: "/session",
-    name: 'SessionView',
-    component: Session
+    name: "SessionView",
+    component: Session,
   },
-  // {
-  //   meta:{
-  //     title: "Upload",
-  //   },
-  //   path: "/upload",
-  //   name: 'UploadView',
-  //   component: Upload
-  // },
   {
-    meta:{
+    meta: {
+      title: "Profile",
+    },
+    path: "/profile2",
+    name: "profile2",
+    component: profile2,
+  },
+  {
+    meta: {
       title: "Login",
     },
     path: "/login",
-    name: 'LoginView',
-    component: Login
+    name: "LoginView",
+    component: Login,
   },
   {
-    meata:{
+    meata: {
       title: "Signup",
     },
     path: "/signup",
@@ -47,20 +47,20 @@ const routes = [
     component: Signup,
   },
   {
-    meta:{
+    meta: {
       title: "Activity",
     },
     path: "/activity",
-    name: 'AcitvityView',
-    component: Activity
+    name: "AcitvityView",
+    component: Activity,
   },
   {
-    meta:{
+    meta: {
       title: "Analysis",
     },
     path: "/analysis",
-    name: 'AnalysisView',
-    component: Analysis
+    name: "AnalysisView",
+    component: Analysis,
   },
   {
     meta: {
@@ -122,6 +122,14 @@ const routes = [
   },
   {
     meta: {
+      title: "Upload2",
+    },
+    path: "/upload2",
+    name: "upload2",
+    component: () => import("@/views/UploadView2.vue"),
+  },
+  {
+    meta: {
       title: "Ui",
     },
     path: "/ui",
@@ -152,9 +160,15 @@ const routes = [
     name: "error",
     component: () => import("@/views/ErrorView.vue"),
   },
-
+  {
+    meta: {
+      title: "Loading",
+    },
+    path: "/loading",
+    name: "loading",
+    component: () => import("@/views/LoadingView.vue"),
+  },
 ];
-
 
 const router = createRouter({
   history: createWebHistory(),

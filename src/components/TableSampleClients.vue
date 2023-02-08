@@ -36,7 +36,7 @@ const itemsPaginated = computed(() =>
   )
 );
 
-const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
+const numPages = computed(() => Math.round(items.value.length / perPage.value));
 
 const currentPageHuman = computed(() => currentPage.value + 1);
 

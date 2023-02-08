@@ -5,13 +5,15 @@ import {
   gradientBgPurplePink,
   gradientBgDark,
   gradientBgPinkRed,
+  gradientBgGreenBlue,
 } from "@/colors";
 
 const props = defineProps({
   bg: {
     type: String,
     required: true,
-    validator: (value) => ["purplePink", "pinkRed"].includes(value),
+    validator: (value) =>
+      ["purplePink", "pinkRed", "greenBlue"].includes(value),
   },
 });
 
@@ -25,6 +27,8 @@ const colorClass = computed(() => {
       return gradientBgPurplePink;
     case "pinkRed":
       return gradientBgPinkRed;
+    case "greenBlue":
+      return gradientBgGreenBlue;
   }
 
   return "";
@@ -39,3 +43,4 @@ const colorClass = computed(() => {
     <slot card-class="w-11/12 md:w-7/12 lg:w-6/12 xl:w-4/12 shadow-2xl" />
   </div>
 </template>
+

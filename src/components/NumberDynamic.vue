@@ -30,7 +30,7 @@ const newValueFormatted = computed(() =>
 const value = computed(() => props.value);
 
 const grow = (m) => {
-  const v = Math.ceil(newValue.value + m);
+  const v = Math.round(newValue.value + m);
 
   if (v > value.value) {
     newValue.value = value.value;
