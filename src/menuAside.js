@@ -13,7 +13,7 @@ import {
   mdiReact,
   mdiRun,
   mdiCalendarRange,
-  mdiFlagCheckered,
+  mdiFlagCheckered
 } from "@mdi/js";
 
 export default [
@@ -89,13 +89,13 @@ export default [
     icon: mdiLock,
   },
   {
-    to: "/error",
-    label: "Error",
-    icon: mdiAlertCircle,
-  },
-  {
     to: "/loading",
     label: "Loading",
+    icon: mdiSquareEditOutline,
+  },
+  {
+    to: "/error",
+    label: "Error",
     icon: mdiAlertCircle,
   },
   {

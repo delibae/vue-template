@@ -148,6 +148,18 @@ const checked = (isChecked, client) => {
     </CardBoxModal>
 
     <CardBoxModal v-model="isModalSearch" title="식사 직접 입력">
+      <FormField label="무슨 음식을 드셨나요?">
+        <FormControl
+            type="text"
+            placeholder="식사 추가"
+          />
+      </FormField>
+      <FormField label="음식을 얼마나 드셨나요?">
+        <FormControl
+            type="number"
+            placeholder="음식 양 추가"
+          />
+      </FormField>
       <div>
         <BaseButton class="mx-2"
           label="추가" color="info" @click="null"/>

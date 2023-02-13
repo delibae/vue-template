@@ -16,6 +16,13 @@ import SectionTitle from "@/components/SectionTitle.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import NotificationBarInCard from "@/components/NotificationBarInCard.vue";
+
+import SectionFullScreen from "@/components/SectionFullScreen.vue";
+
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+
+const loading_c = ref(null);
+loading_c.value = false;
 // to do 
 let now = new Date("2022-09-01").toISOString().split("T")[0];;
 
@@ -88,12 +95,13 @@ const activity_sum = ref(null);
 // const nutrient_trend = ref(null);
 // const yes_nutrient_sum = ref(null);
 const activity_warn = ref(null);
+var today_activity_time = []; // 오늘 한[ [운동, 시간(분)],[운동, 시간(분)],[운동, 시간(분)],[운동, 시간(분)] ]
 
 
 
 
 activity_sum.value = { 'today_activity': 1000, 'today_activity_goal': 500 };
-
+today_sum.value = { "today_cal": 3000, "today_weight": 70, "today_remain": 1000 };
 activity_warn.value = ['Good!', 'success'];
 
 const get_today = async () => {
@@ -101,7 +109,8 @@ const get_today = async () => {
     var response = await axios.get('http://localhost:3001/api/profile', {
       withCredentials: true,
     });
-
+    today_sum.value['today_cal'] = response.data[0].kcal_per_day;
+    today_sum.value['today_weight'] = response.data[0].current_weight;
     var current_weight = response.data[0].current_weight;
 
   } catch (err) {
@@ -130,7 +139,7 @@ const get_today = async () => {
     var activity_in = { 'today_activity': 0, 'today_activity_goal': 0 };
 
     for (var i = 0; i < response.data[3].length; i++) {
-      activity_in['today_activity'] += Math.round(response.data[3][i]['working_time'] * response.data[3][i]['coefficient']*current_weight/15);
+      activity_in['today_activity'] += Math.round(response.data[3][i]['working_time'] * response.data[3][i]['coefficient'] * current_weight / 15);
     }
 
     activity_sum.value = activity_in;
@@ -141,15 +150,50 @@ const get_today = async () => {
     if (today_sum.value['today_remain'] >= 0) {
       activity_sum.value['today_activity_goal'] = 0;
     } else {
-      activity_sum.value['todya_activity_goal'] -= today_sum.value['total_remain'];
+      activity_sum.value['today_activity_goal'] -= today_sum.value['total_remain'];
       activity_warn.value[0] = "Warning!";
       activity_warn.value[1] = "alert";
     }
 
-    console.log("today total >>", response.data[3]);
+
+    let arr = ['걷기', '러닝', '줄넘기', '수영', '자전거', '에어로빅 및 필라테스'];
+    let coeff_arr = {
+      '걷기': 0.9,
+      '러닝': 2.5,
+      '줄넘기': 2.3,
+      '수영': 2,
+      '자전거': 2,
+      '에어로빅 및 필라테스': 1.5
+    }
+
+    let activity_dict = {};
+    let act_kcal_dict = {};
+    for (let i = 0; i < Object.keys(response.data[3]).length; i++) {
+      var activity_name = arr[Number(response.data[3][i]["working_out_code"])];
+      var time = Number(response.data[3][i]["working_time"])
+      if (activity_name in (activity_dict)) {
+        activity_dict[activity_name] += time;
+      }
+      else {
+        activity_dict[activity_name] = time;
+      }
+    }
+
+    for (var key in activity_dict) {
+      console.log("key : " + key + ", value : " + activity_dict[key]);
+      today_activity_time.push([key, activity_dict[key]])
+    }
+    //여기부터 하다 말음
+    // for (let i=0; Object.values(activity_dict).length;i++){
+    //   console.log('test',i);
+    // }
+    // console.log('here',coeff_arr['수영']);
+
+
   } catch (err) {
     console.log("Error >>", err);
   }
+  loading_c.value = true;
 };
 
 get_today();
@@ -158,41 +202,65 @@ get_today();
 
 <template>
   <LayoutAuthenticated @change="change">
+
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiRun" title="금일 활동">
-        <BaseButton :icon="mdiReload" color="whiteDark" />
-      </SectionTitleLineWithButton>
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
-        <CardBoxWidget trend="12%" trend-type="up" color="text-red-500" :icon="mdiFire"
-          :number="activity_sum['today_activity']" suffix="kcal" label="금일 운동 열량" />
-        <CardBoxWidget :trend="activity_warn[0]" :trend-type="activity_warn[1]" color="text-red-500" :icon="mdiFire"
-          :number="activity_sum['today_activity_goal']" suffix="kcal" label="필수 운동량" />
+      <div v-if="!loading_c">
+        <SectionFullScreen v-slot="{ cardClass }" bg="greenBlue">
+          <CardBox :class="cardClass">
+            <div class="space-y-3">
+              <h1 class="text-2xl" style="text-align: center"></h1>
+              <LoadingSpinner style="text-align: center" />
+
+              <p style="text-align: center">Loading...</p>
+            </div>
+          </CardBox>
+        </SectionFullScreen>
       </div>
+      <div v-if="loading_c">
+        <SectionTitleLineWithButton :icon="mdiRun" title="금일 활동">
+          <BaseButton :icon="mdiReload" color="whiteDark" />
+        </SectionTitleLineWithButton>
 
-      <SectionTitleLineWithButton :icon="mdiPencil" title="운동 기록">
-        <BaseButton :icon="mdiReload" color="whiteDark" />
-      </SectionTitleLineWithButton>
 
-      <CardBox class="md:w-7/12 lg:w-5/12 xl:w-6/12 shadow-2xl md:mx-auto" is-form is-hoverable
-        @submit.prevent="formStatusSubmit">
-        <NotificationBarInCard :color="formStatusOptions[formStatusCurrent]"
-          :is-placed-with-header="formStatusWithHeader">
-          <span><b class="capitalize">
-              운동 기록하기</b>
-          </span>
-        </NotificationBarInCard>
-        <FormField label="운동 종류">
-          <FormControl v-model="form.working_out_code2" :icon-left="mdiAccount" help="운동 종류를 입력해주세요"
-            placeholder="ex. 러닝" :options="selectOptions" />
-        </FormField>
-        <FormField label="운동 시간">
-          <FormControl v-model="form.working_time" :icon-left="mdiAccount" help="운동 시간을 입력해주세요" placeholder="ex. 2" />
-        </FormField>
-        <div class=" w-full flex flex-row justify-center">
-          <BaseButton class=" w-3/12" label="submit" type="submit" color="info" @click="submit" />
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+          <CardBoxWidget trend="12%" trend-type="up" color="text-red-500" :icon="mdiFire"
+            :number="activity_sum['today_activity']" suffix="kcal" label="금일 운동 열량" />
+          <CardBoxWidget :trend="activity_warn[0]" :trend-type="activity_warn[1]" color="text-red-500" :icon="mdiFire"
+            :number="activity_sum['today_activity_goal']" suffix="kcal" label="필수 운동량" />
+
         </div>
-      </CardBox>
+        <div>
+          운동목록:
+        </div>
+
+        <li v-for="item in today_activity_time" :key="item">
+          {{ item[0] }}: {{ item[1]+'분' }}
+        </li>
+        <SectionTitleLineWithButton :icon="mdiPencil" title="운동 기록">
+          <BaseButton :icon="mdiReload" color="whiteDark" />
+        </SectionTitleLineWithButton>
+
+        <CardBox class="md:w-7/12 lg:w-5/12 xl:w-6/12 shadow-2xl md:mx-auto" is-form is-hoverable
+          @submit.prevent="formStatusSubmit">
+          <NotificationBarInCard :color="formStatusOptions[formStatusCurrent]"
+            :is-placed-with-header="formStatusWithHeader">
+            <span><b class="capitalize">
+                운동 기록하기</b>
+            </span>
+          </NotificationBarInCard>
+          <FormField label="운동 종류">
+            <FormControl v-model="form.working_out_code2" :icon-left="mdiAccount" help="운동 종류를 입력해주세요"
+              placeholder="ex. 러닝" :options="selectOptions" />
+          </FormField>
+          <FormField label="운동 시간">
+            <FormControl v-model="form.working_time" :icon-left="mdiAccount" help="운동 시간을 입력해주세요" placeholder="ex. 2" />
+          </FormField>
+          <div class=" w-full flex flex-row justify-center">
+            <BaseButton class=" w-3/12" label="submit" type="submit" color="info" @click="submit" />
+          </div>
+        </CardBox>
+      </div>
     </SectionMain>
   </LayoutAuthenticated>
 </template>

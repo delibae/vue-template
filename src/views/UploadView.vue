@@ -158,7 +158,7 @@ const get_today = async () => {
         ((nutrient_sum.value[label_list[i]] -
           yes_nutrient_sum.value[label_list[i]]) *
           100) /
-        yes_nutrient_sum.value[label_list[i]]
+          yes_nutrient_sum.value[label_list[i]]
       );
       nutrient_trend.value[label_list[i]][0] = percent + "%";
       if (percent > 0) {
@@ -237,51 +237,117 @@ const transactionBarItems = computed(() => mainStore.history);
     <CardBoxModal v-model="modalInputActive" title="새로운 식사 입력">
       <p>직접 정보를 입력</p>
       <FormField label="무슨 음식을 드셨나요?">
-        <FormControl v-model="addinfo.foodname" :icon-left="mdiAccount" help="WhatFood" id="whatfood"
-          placeholder="음식명 하나를 입력하세요" />
+        <FormControl
+          v-model="addinfo.foodname"
+          :icon-left="mdiAccount"
+          help="WhatFood"
+          id="whatfood"
+          placeholder="음식명 하나를 입력하세요"
+        />
       </FormField>
 
       <FormField label="음식을 얼마나 드셨나요?">
-        <FormControl v-model="addinfo.foodamount" :icon-left="mdiAccount" help="CurrentWeight" id="foodamount"
-          placeholder="먹은 음식의 양을 입력하세요" type="number" />
+        <FormControl
+          v-model="addinfo.foodamount"
+          :icon-left="mdiAccount"
+          help="CurrentWeight"
+          id="foodamount"
+          placeholder="먹은 음식의 양을 입력하세요"
+          type="number"
+        />
       </FormField>
 
       <BaseDivider />
 
       <BaseButtons>
-        <BaseButton class="w-3/12" type="submit" color="info" label="추가" @click="addRow()" />
-        <BaseButton class="w-3/12" type="submit" color="info" outline label="취소" @click="modalInputActive = false" />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          label="추가"
+          @click="addRow()"
+        />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          outline
+          label="취소"
+          @click="modalInputActive = false"
+        />
       </BaseButtons>
     </CardBoxModal>
 
-    <CardBoxModal v-model="modalDetectionActive" title="인공지능이 예측해주는 식사">
+    <CardBoxModal
+      v-model="modalDetectionActive"
+      title="인공지능이 예측해주는 식사"
+    >
       <FormField label="이미지 업로드" help="하나의 이미지 파일만 추가 가능">
         <FormFilePicker label="파일 추가" />
       </FormField>
 
       <BaseButtons title>
-        <BaseButton class="w-3/12" type="submit" color="info" label="전송" @click="sendImage" />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          label="전송"
+          @click="sendImage"
+        />
         <p>[서버 전송상태 표시]</p>
       </BaseButtons>
 
       <BaseButtons>
-        <BaseButton class="w-3/12" type="submit" color="info" label="추가" @click="addRow()" />
-        <BaseButton class="w-3/12" type="submit" color="info" outline label="취소"
-          @click="modalDetectionActive = false" />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          label="추가"
+          @click="addRow()"
+        />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          outline
+          label="취소"
+          @click="modalDetectionActive = false"
+        />
       </BaseButtons>
     </CardBoxModal>
 
-    <CardBoxModal v-model="modalDeleteActive" title="식사를 삭제하시겠습니까?" button="danger">
+    <CardBoxModal
+      v-model="modalDeleteActive"
+      title="식사를 삭제하시겠습니까?"
+      button="danger"
+    >
       <p>가장 마지막에 추가한 식사를 <b>삭제</b>합니다.</p>
       <p>이 작업은 <i>되돌릴 수 없습니다.</i></p>
       <BaseButtons>
-        <BaseButton class="w-3/12" type="submit" color="info" label="삭제" @click="deleteRow()" />
-        <BaseButton class="w-3/12" type="submit" color="info" outline label="취소" @click="modalDeleteActive = false" />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          label="삭제"
+          @click="deleteRow()"
+        />
+        <BaseButton
+          class="w-3/12"
+          type="submit"
+          color="info"
+          outline
+          label="취소"
+          @click="modalDeleteActive = false"
+        />
       </BaseButtons>
     </CardBoxModal>
 
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiBallotOutline" title="식단 추천 & 인증" main>
+      <SectionTitleLineWithButton
+        :icon="mdiBallotOutline"
+        title="식단 추천 & 인증"
+        main
+      >
       </SectionTitleLineWithButton>
     </SectionMain>
 
@@ -290,16 +356,26 @@ const transactionBarItems = computed(() => mainStore.history);
         <BaseDivider />
 
         <FormField label="Radio">
-          <FormCheckRadioGroup v-model="customElementsForm.radio" name="sample-radio" type="radio"
-            :options="{ one: 'One', two: 'Two' }" />
+          <FormCheckRadioGroup
+            v-model="customElementsForm.radio"
+            name="sample-radio"
+            type="radio"
+            :options="{ one: 'One', two: 'Two' }"
+          />
         </FormField>
       </CardBox>
 
       <!-- class="md:w-7/12 lg:w-5/12 xl:w-4/12 shadow-2xl md:mx-auto" -->
-      <CardBox class="md:w-12/12 lg:w-12/12 xl:w-12/12 shadow-2xl md:mx-auto" is-form is-hoverable
-        @submit.prevent="formStatusSubmit">
-        <NotificationBarInCard :color="formStatusOptions[formStatusCurrent]"
-          :is-placed-with-header="formStatusWithHeader">
+      <CardBox
+        class="md:w-12/12 lg:w-12/12 xl:w-12/12 shadow-2xl md:mx-auto"
+        is-form
+        is-hoverable
+        @submit.prevent="formStatusSubmit"
+      >
+        <NotificationBarInCard
+          :color="formStatusOptions[formStatusCurrent]"
+          :is-placed-with-header="formStatusWithHeader"
+        >
           <span>식단 인증</span>
         </NotificationBarInCard>
 
@@ -317,34 +393,83 @@ const transactionBarItems = computed(() => mainStore.history);
 
         <template #footer>
           <BaseButtons>
-            <BaseButton label="식사 입력" color="info" @click="modalInputActive = true" />
-            <BaseButton label="식사 예측" color="info" @click="modalDetectionActive = true" />
-            <BaseButton label="식사 삭제" color="info" @click="modalDeleteActive = true" />
+            <BaseButton
+              label="식사 입력"
+              color="info"
+              @click="modalInputActive = true"
+            />
+            <BaseButton
+              label="식사 예측"
+              color="info"
+              @click="modalDetectionActive = true"
+            />
+            <BaseButton
+              label="식사 삭제"
+              color="info"
+              @click="modalDeleteActive = true"
+            />
           </BaseButtons>
         </template>
       </CardBox>
 
       <SectionMain>
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-4 mb-6">
-          <CardBoxWidget class="shadow-2xl" trend="Info" trend-type="success" color="text-red-500" :icon="mdiFire"
-            :number="today_sum['today_remain']" suffix="kcal" label="남은 섭취 가능 열량" />
-          <CardBoxWidget class="shadow-2xl" :trend="nutrient_trend['carbo'][0]" :trend-type="nutrient_trend['carbo'][1]"
-            color="text-lime-400" :icon="mdiRice" :number="nutrient_sum['carbo']" suffix="g" label="남은 탄수화물" />
-          <CardBoxWidget class="shadow-2xl" :trend="nutrient_trend['protein'][0]"
-            :trend-type="nutrient_trend['protein'][1]" color="text-orange-800" :icon="mdiFoodDrumstick"
-            :number="nutrient_sum['protein']" suffix="g" label="남은 단백질" />
-          <CardBoxWidget class="shadow-2xl" :trend="nutrient_trend['fat'][0]" :trend-type="nutrient_trend['fat'][1]"
-            color="text-rose-300" :icon="mdiPigVariantOutline" :number="nutrient_sum['fat']" suffix="g" label="남은 지방" />
+          <CardBoxWidget
+            class="shadow-2xl"
+            trend="Info"
+            trend-type="success"
+            color="text-red-500"
+            :icon="mdiFire"
+            :number="today_sum['today_remain']"
+            suffix="kcal"
+            label="남은 섭취 가능 열량"
+          />
+          <CardBoxWidget
+            class="shadow-2xl"
+            :trend="nutrient_trend['carbo'][0]"
+            :trend-type="nutrient_trend['carbo'][1]"
+            color="text-lime-400"
+            :icon="mdiRice"
+            :number="nutrient_sum['carbo']"
+            suffix="g"
+            label="남은 탄수화물"
+          />
+          <CardBoxWidget
+            class="shadow-2xl"
+            :trend="nutrient_trend['protein'][0]"
+            :trend-type="nutrient_trend['protein'][1]"
+            color="text-orange-800"
+            :icon="mdiFoodDrumstick"
+            :number="nutrient_sum['protein']"
+            suffix="g"
+            label="남은 단백질"
+          />
+          <CardBoxWidget
+            class="shadow-2xl"
+            :trend="nutrient_trend['fat'][0]"
+            :trend-type="nutrient_trend['fat'][1]"
+            color="text-rose-300"
+            :icon="mdiPigVariantOutline"
+            :number="nutrient_sum['fat']"
+            suffix="g"
+            label="남은 지방"
+          />
         </div>
       </SectionMain>
 
-      <CardBox class="md:w-12/12 lg:w-12/12 xl:w-12/12 shadow-2xl md:mx-auto" is-form is-hoverable
-        @submit.prevent="formStatusSubmit">
-        <NotificationBarInCard :color="formStatusOptions[formStatusCurrent]"
-          :is-placed-with-header="formStatusWithHeader">
+      <CardBox
+        class="md:w-12/12 lg:w-12/12 xl:w-12/12 shadow-2xl md:mx-auto"
+        is-form
+        is-hoverable
+        @submit.prevent="formStatusSubmit"
+      >
+        <NotificationBarInCard
+          :color="formStatusOptions[formStatusCurrent]"
+          :is-placed-with-header="formStatusWithHeader"
+        >
           <span>식단 추천</span>
         </NotificationBarInCard>
-
+        
         <div id="app">
           <table>
             <thead>
@@ -360,9 +485,21 @@ const transactionBarItems = computed(() => mainStore.history);
 
         <template #footer>
           <BaseButtons>
-            <BaseButton label="식사 입력" color="info" @click="modalInputActive = true" />
-            <BaseButton label="식사 예측" color="info" @click="modalDetectionActive = true" />
-            <BaseButton label="식사 삭제" color="info" @click="modalDeleteActive = true" />
+            <BaseButton
+              label="식사 입력"
+              color="info"
+              @click="modalInputActive = true"
+            />
+            <BaseButton
+              label="식사 예측"
+              color="info"
+              @click="modalDetectionActive = true"
+            />
+            <BaseButton
+              label="식사 삭제"
+              color="info"
+              @click="modalDeleteActive = true"
+            />
           </BaseButtons>
         </template>
       </CardBox>
@@ -417,8 +554,8 @@ export default {
       colFour.innerHTML = '<input type="submit" value="삭제">'
       //삭제 버튼 기능 구현 아직 안됨
       //입력 후 초기화
-      document.getElementById("whatfood").value = "";
-      document.getElementById("foodamount").value = "";
+      document.getElementById("whatfood").value="";
+      document.getElementById("foodamount").value="";
     },
     deleteRow: function () {
       const table = document
@@ -508,20 +645,16 @@ table {
   width: 75%;
   text-align: left;
 }
-
 table th {
   padding: 12px;
   border-bottom: 2px solid darkgray;
 }
-
 table td {
   padding: 12px;
 }
-
 table tr:nth-of-type(even) {
   background-color: rgba(0, 0, 255, 0.1);
 }
-
 .box {
   padding: 10px;
   margin: 10px;

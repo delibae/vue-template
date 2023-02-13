@@ -30,22 +30,22 @@ import CardBoxClient from "@/components/CardBoxClient.vue";
 import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import SectionBannerStarOnGitHub from "@/components/SectionBannerStarOnGitHub.vue";
-import SectionFullScreen from "@/components/SectionFullScreen.vue";
-import LayoutGuest from "@/layouts/LayoutGuest.vue";
-import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { get_days, get_months } from "@/rest/chartconfig.js";
+
+import SectionFullScreen from "@/components/SectionFullScreen.vue";
+
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 // to do 
 let now = new Date("2022-09-01");
-
-const loading_c = ref(null);
-
-loading_c.value = false;
 
 const chartData = ref(null);
 
 const chartData2 = ref(null);
 
+const loading_c = ref(null);
+
+loading_c.value = false;
 
 const fillChartData_days = async () => {
 
@@ -160,6 +160,8 @@ const get_today = async () => {
 
     // to do 운동으로 인한 섭취 가능 칼로리 증가 필요(완료)
     today_sum.value['today_remain'] = today_sum.value['today_cal'] - total_eat + activity_in['today_activity'];
+    console.log("today_remain", today_sum.value['today_remain']);
+
 
     if (today_sum.value['today_remain'] >= 0) {
       activity_sum.value['today_activity_goal'] = 0;
@@ -172,72 +174,13 @@ const get_today = async () => {
     }
 
     console.log("today total >>", response.data[3]);
+    loading_c.value = true;
   } catch (err) {
     console.log("Error >>", err);
   }
-  nutrient_sum.value = n_in;
-  var n_in = { 'fat': 0, 'protein': 0, 'carbo': 0 }
-  var yes_total_eat = 0;
-  for (var i = 0; i < response.data[1].length; i++) {
-    n_in['fat'] += response.data[1][i]['fat'];
-    n_in['protein'] += response.data[1][i]['protein'];
-    n_in['carbo'] += response.data[1][i]['carbo'];
-    yes_total_eat += response.data[0][i]['kcal'];
-  }
-  yes_nutrient_sum.value = n_in;
-  console.log('yes', yes_nutrient_sum.value);
-
-  var label_list = ['fat', 'protein', 'carbo']
-  for (var i = 0; i < label_list.length; i++) {
-    var percent = Math.ceil((nutrient_sum.value[label_list[i]] - yes_nutrient_sum.value[label_list[i]]) * 100 / (yes_nutrient_sum.value[label_list[i]]));
-    nutrient_trend.value[label_list[i]][0] = percent + '%'
-    if (percent > 0) {
-      nutrient_trend.value[label_list[i]][1] = 'up';
-    } else if (percent < 0) {
-      nutrient_trend.value[label_list[i]][1] = 'down';
-    } else {
-      nutrient_trend.value[label_list[i]][1] = 'mid';
-    }
-
-  }
-
-  var yes_weight = response.data[2][0].weight;
-  var w_percent = Math.ceil((today_sum.value.today_weight - yes_weight) * 100 / yes_weight)
-  weight_trend.value[0] = w_percent + '%'
-
-  if (w_percent > 0) {
-    weight_trend.value[1] = 'up'
-  } else if (w_percent < 0) {
-    weight_trend.value[1] = 'down'
-  } else {
-    weight_trend.value[1] = 'mid'
-  }
-
-  var activity_in = { 'today_activity': 0, 'today_activity_goal': 0 };
-
-  for (var i = 0; i < response.data[3].length; i++) {
-    activity_in['today_activity'] += response.data[3][i]['working_time'] * response.data[3][i]['coefficient'];
-  }
-
-  activity_sum.value = activity_in;
-
-
-  // to do 운동으로 인한 섭취 가능 칼로리 증가 필요(완료)
-  today_sum.value['today_remain'] = today_sum.value['today_cal'] - total_eat + activity_in['today_activity'];
-
-  if (today_sum.value['today_remain'] >= 0) {
-    activity_sum.value['today_activity_goal'] = 0;
-  } else {
-    activity_sum.value['todya_activity_goal'] -= today_sum.value['total_remain'];
-    activity_warn.value[0] = "Warning!";
-    activity_warn.value[1] = "alert";
-  }
-
-  console.log("today total >>", response.data[3]);
 
   loading_c.value = true;
-}
-
+};
 
 get_today();
 
@@ -265,23 +208,20 @@ const transactionBarItems = computed(() => mainStore.history);
 
 <template>
   <LayoutAuthenticated @change="change">
+    <div v-if="!loading_c">
+      <SectionFullScreen v-slot="{ cardClass }" bg="greenBlue">
+        <CardBox :class="cardClass">
+          <div class="space-y-3">
+            <h1 class="text-2xl" style="text-align: center"></h1>
+            <LoadingSpinner style="text-align: center" />
 
-    <SectionMain>
-      <div v-if="!loading_c">
-        <LayoutGuest>
-          <SectionFullScreen v-slot="{ cardClass }" bg="greenBlue">
-            <CardBox :class="cardClass">
-              <div class="space-y-3">
-                <h1 class="text-2xl" style="text-align: center"></h1>
-                <LoadingSpinner style="text-align: center" />
-
-                <p style="text-align: center">Loading...</p>
-              </div>
-            </CardBox>
-          </SectionFullScreen>
-        </LayoutGuest>
-      </div>
-      <div v-if="loading_c">
+            <p style="text-align: center">Loading...</p>
+          </div>
+        </CardBox>
+      </SectionFullScreen>
+    </div>
+    <div v-if="loading_c">
+      <SectionMain>
         <!-- <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Overview" main>
         <BaseButton href="https://github.com/justboil/admin-one-vue-tailwind" target="_blank" :icon="mdiGithub"
           label="Star on GitHub" color="contrast" rounded-full small />
@@ -299,7 +239,6 @@ const transactionBarItems = computed(() => mainStore.history);
             :number="today_sum['today_remain']" suffix="kcal" label="남은 섭취 가능 열량" />
         </div>
 
-
         <SectionTitleLineWithButton :icon="mdiCalendarToday" title="금일 영양소 섭취">
           <BaseButton :icon="mdiReload" color="whiteDark" />
         </SectionTitleLineWithButton>
@@ -312,7 +251,6 @@ const transactionBarItems = computed(() => mainStore.history);
           <CardBoxWidget :trend="nutrient_trend['fat'][0]" :trend-type="nutrient_trend['fat'][1]" color="text-rose-300"
             :icon="mdiPigVariantOutline" :number="nutrient_sum['fat']" suffix="g" label="지방" />
         </div>
-
 
         <SectionTitleLineWithButton :icon="mdiRun" title="금일 활동">
           <BaseButton :icon="mdiReload" color="whiteDark" />
@@ -382,8 +320,8 @@ const transactionBarItems = computed(() => mainStore.history);
         <!-- <CardBox has-table>
         <TableSampleClients />
       </CardBox> -->
-      </div>
-    </SectionMain>
+      </SectionMain>
+    </div>
   </LayoutAuthenticated>
 </template>
 

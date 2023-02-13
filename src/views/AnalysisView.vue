@@ -20,7 +20,15 @@ import CardBoxWidget from "@/components/CardBoxWidget.vue";
 import { useMainStore } from "@/stores/main";
 import { ref, watch } from "vue";
 
+
+import SectionFullScreen from "@/components/SectionFullScreen.vue";
+
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+
 const date_range = ref(null);
+
+const loading_c = ref(null);
+loading_c.value = false;
 
 date_range.value = ['2022-08-30', '2022-08-31']
 
@@ -46,6 +54,7 @@ async function test() {
     }
     lineData.value = response.data.lineData;
     table_view.value = true;
+    loading_c.value = true;
   } catch (err) {
     console.log("Error >>", err);
   }
@@ -66,60 +75,74 @@ watch(() => date_range.value[0], (newValue, oldValue) => {
 
 <template>
   <LayoutAuthenticated @change="change">
-    <SectionMain>
+    <div v-if="!loading_c">
+      <SectionFullScreen v-slot="{ cardClass }" bg="greenBlue">
+        <CardBox :class="cardClass">
+          <div class="space-y-3">
+            <h1 class="text-2xl" style="text-align: center"></h1>
+            <LoadingSpinner style="text-align: center" />
 
-      <SectionTitleLineWithButton :icon="mdiCalendarTextOutline" title="설정 기간 분석">
-        <!-- <BaseButton :icon="mdiReload" color="whiteDark" /> -->
-      </SectionTitleLineWithButton>
-      <div date-rangepicker class="flex items-center">
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-              viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                clip-rule="evenodd"></path>
-            </svg>
+            <p style="text-align: center">Loading...</p>
           </div>
-          <input name="start" type="date" v-model="date_range[0]"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Select date start">
-        </div>
-        <span class="mx-4 text-gray-500">~</span>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-              viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd"
-                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                clip-rule="evenodd"></path>
-            </svg>
+        </CardBox>
+      </SectionFullScreen>
+    </div>
+    <div v-if="loading_c">
+      <SectionMain>
+
+        <SectionTitleLineWithButton :icon="mdiCalendarTextOutline" title="설정 기간 분석">
+          <!-- <BaseButton :icon="mdiReload" color="whiteDark" /> -->
+        </SectionTitleLineWithButton>
+        <div date-rangepicker class="flex items-center">
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <input name="start" type="date" v-model="date_range[0]"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Select date start">
           </div>
-          <input name="end" type="date" v-model="date_range[1]"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Select date end">
+          <span class="mx-4 text-gray-500">~</span>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <input name="end" type="date" v-model="date_range[1]"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Select date end">
+          </div>
         </div>
-      </div>
 
-      <br />
-      <CardBox class="mb-6" has-table v-if="table_view">
-        <TableSam :lineData="lineData" :checkable="false" />
-      </CardBox>
+        <br />
+        <CardBox class="mb-6" has-table v-if="table_view">
+          <TableSam :lineData="lineData" :checkable="false" />
+        </CardBox>
 
-      <SectionTitleLineWithButton :icon="mdiCalendarTextOutline" title="설정 기간 통계">
-        <!-- <BaseButton :icon="mdiReload" color="whiteDark" /> -->
-      </SectionTitleLineWithButton>
+        <SectionTitleLineWithButton :icon="mdiCalendarTextOutline" title="설정 기간 통계">
+          <!-- <BaseButton :icon="mdiReload" color="whiteDark" /> -->
+        </SectionTitleLineWithButton>
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
-        <CardBoxWidget trend="12%" trend-type="up" color="text-red-500" :icon="mdiFire" :number="average.avgWeight"
-          suffix="kg" label="평균 몸무게" />
-        <CardBoxWidget trend="12%" trend-type="down" color="text-black-500" :icon="mdiWeightKilogram"
-          :number="average.avgKcal" suffix="kcal" label="평균 감량 열량" />
-        <CardBoxWidget trend="Overflow" trend-type="alert" color="text-red-500" :icon="mdiFire"
-          :number="average.avgConsume" suffix="kcal" label="평균 소비 열량" />
-      </div>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+          <CardBoxWidget trend="12%" trend-type="up" color="text-red-500" :icon="mdiFire" :number="average.avgWeight"
+            suffix="kg" label="평균 몸무게" />
+          <CardBoxWidget trend="12%" trend-type="down" color="text-black-500" :icon="mdiWeightKilogram"
+            :number="average.avgKcal" suffix="kcal" label="평균 감량 열량" />
+          <CardBoxWidget trend="Overflow" trend-type="alert" color="text-red-500" :icon="mdiFire"
+            :number="average.avgConsume" suffix="kcal" label="평균 소비 열량" />
+        </div>
 
-    </SectionMain>
+      </SectionMain>
+    </div>
   </LayoutAuthenticated>
 </template>
 
